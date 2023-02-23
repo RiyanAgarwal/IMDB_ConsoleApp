@@ -9,26 +9,17 @@ namespace Question_3
             while(true)
             {
                 Console.WriteLine("Enter comma separated numbers");
-                var input=Console.ReadLine();
-                var numbers=input.Split(',');
-                var lengthOfNumbers=numbers.Length;
-                if(lengthOfNumbers<5)
+                var numbers = Console.ReadLine().Split(',').Select(int.Parse).ToArray();
+                var lengthOfNumbers = numbers.Length;
+                if (lengthOfNumbers < 5)
                 {
                     Console.WriteLine("Entered list is invalid...Try again");
                 }
                 else
                 {
-                    var integerArray=new int[lengthOfNumbers];
-                    for(var i=0;i<lengthOfNumbers;i++)
-                    {
-                        integerArray[i]=Convert.ToInt32(numbers[i]);
-                    }
-                    Array.Sort(integerArray);
+                    Array.Sort(numbers);
                     Console.WriteLine("Three smallest numbers are:");
-                    for(var i=0;i<3;i++)
-                    {
-                        Console.WriteLine(integerArray[i]);
-                    }    
+                    Console.WriteLine(String.Format("{0} {1} {2}", numbers[0], numbers[1] , numbers[2]));
                     break;
                 }
             }
