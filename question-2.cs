@@ -9,15 +9,9 @@ namespace Question_2
             int max = 0;
             Console.WriteLine("Enter comma separated numbers");
             var input = Console.ReadLine();
-            var numbers = input.Split(',');
-            foreach (var number in numbers)
-            {
-                if ((max < Convert.ToInt32(number)))
-                {
-                    max = Convert.ToInt32(number);
-                }
-            }
-            Console.WriteLine("Max = "+ max);
+            var numbers =input.Split(',').Select(int.Parse).ToArray();
+            Array.Sort(numbers);
+            Console.WriteLine("Max = " + numbers[numbers.Length-1]);
         }
     }
 }
