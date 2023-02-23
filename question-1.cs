@@ -6,17 +6,16 @@ namespace Question_1
     {
         static void Main(string[] args)
         {
-            var finalResult=0;
-            Console.WriteLine("Enter any number to add to the result, or enter \"ok\" to Exit");
-            while(true)
+            var finalResult = 0;
+            while (true)
             {
-                var input=Console.ReadLine();
-                if (input=="ok"){
+                Console.WriteLine("Enter any number to add to the result, or enter \"ok\" to Exit");
+                var input = Console.ReadLine();
+                if (input.ToLower() == "ok")
+                {
                     break;
                 }
-                finalResult+=Convert.ToInt32(input);
-                Console.WriteLine("You can enter more numbers to add, or \"ok\" to Exit");
-
+                finalResult += Convert.ToInt32(input);
             }
             Console.WriteLine("Sum of numbers entered till now = "+ finalResult);
         }
