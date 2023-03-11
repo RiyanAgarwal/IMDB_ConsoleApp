@@ -4,6 +4,7 @@ using IMDB.Service;
 using IMDB.Domain;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using TechTalk.SpecFlow.Assist;
+using System;
 
 namespace IMDB.Tests.StepDefinitions
 
@@ -12,7 +13,7 @@ namespace IMDB.Tests.StepDefinitions
     public sealed class IMDBStepDefinitions
     {
         private IIMDBService _service;
-        private string _name, _plot;
+        private string _name, _plot,_message;
         private int _yearOfRelease;
         private List<string> _actors;
         private string _producer;
@@ -55,13 +56,18 @@ namespace IMDB.Tests.StepDefinitions
         }
 
         [Given(@"the following data is entered (.*), (.*), (.*), (.*), (.*)")]
-        public void GivenTheFollowingDataIsEntered(string name,string plot,string actorsIndex,int producerIndex,int yearOfRelease)
+        public void GivenTheFollowingDataIsEntered(string name,string plot,string actorsIndex,string producerIndex,string yearOfRelease)
         {
-            _yearOfRelease=yearOfRelease;
+            //_yearOfRelease=Int16.Parse(yearOfRelease);
+            //_name=name; 
+            //_plot=plot;
+            _actors = _service.ChosenActors(actorsIndex);
+            _producer = _service.ChosenProducer(int.Parse(producerIndex));
+            _yearOfRelease = int.Parse(yearOfRelease);
             _plot=plot;
             _name=name;
-            _producer = _service.ChosenProducer(producerIndex);
-            _actors=_service.ChosenActors(actorsIndex);
+            //_producer = "";
+            
         }
 
         [When("movie is added to repository")]
@@ -70,6 +76,7 @@ namespace IMDB.Tests.StepDefinitions
             try
             {
                 _service.Add(_yearOfRelease, _name, _plot, _producer, _actors);
+                _message = "movie is added successfully";
             }
             catch (Exception ex)
             {
@@ -80,7 +87,7 @@ namespace IMDB.Tests.StepDefinitions
         [Then(@"an error ""(.*)"" is displayed")]
         public void ThenTheErrorIs(string message)
             {
-                Assert.Equal(message, _exception.Message);
+                Assert.Equal(_exception.Message ,message);
             }
 
 
@@ -93,31 +100,39 @@ namespace IMDB.Tests.StepDefinitions
         [When(@"repository is empty")]
         public void GivenRepositoryIsEmpty()
         {
-            if (_movies == null) 
+            if (_movies.Count() == 0) 
             {
-               
+                _message="Currently repository is empty";
             }
         }
         [Then(@"output should be ""(.*)""")]
         public void ThenOutputShouldBe(string message)
         {
-            Assert.Equal( "Currently repository is empty", message);
+            Assert.Equal( _message, message);
         }
         [When(@"repository of movies is not empty")]
         public void GivenRepositoryOfMoviesIsNotEmpty()
         {
-           if ( _movies != null) { }
+           if ( _movies.Count() > 0) 
+            {
+                _message=_service.ListMovies();
+            }
         }
 
         [Then(@"the following movies must be listed")]
         public void ThenTheFollowingMoviesMustBeListed(string message)
         {
-            Assert.Equal(_service.ListMovies(), message);
+            Assert.Equal(_message, message);
         }
         [Then(@"the message ""(.*)"" display")]
         public void ThenMessageShown(string message)
         {
-            Assert.Equal("movie is added successfully",message);
+            Assert.Equal(_message,message);
+        }
+        [BeforeScenario("listRepository")]
+        public void AddSampleMovieToPrint()
+        {
+            _service.Add(2019, "Ford and Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interference", "James Mangold",new List<string>() { "Matt Damon", "Christian Bale" });
         }
     }
 }
