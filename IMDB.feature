@@ -15,7 +15,7 @@ Scenario: Add a movie to repository
 
 @addMovie
 Scenario Outline: Data entered is invalid
-	Given the following data is entered "<Name>", "<Plot>", "<Actors>", "<Producer>", "<Year>"
+	Given the following data is entered <Name>, <Plot>, <Actors>, <Producer>, <Year>
 	When movie is added to repository
 	Then an error "Invalid data" is displayed
 	Examples:
@@ -27,14 +27,14 @@ Scenario Outline: Data entered is invalid
 		| Ford v Ferrari   | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 1 2			  | 4			 | 2019 |
 	
 
-@listMovie
+@listEmptyRepository
 Scenario: Movie repository should not be empty
 	Given list of movies is fetched
 	When repository is empty
 	Then output should be "Currently repository is empty"
 
 
-@listMovie
+@listRepository
 Scenario: List all movies in the repository
 	Given list of movies is fetched
 	When repository of movies is not empty
