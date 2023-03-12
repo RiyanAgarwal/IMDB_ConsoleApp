@@ -13,7 +13,6 @@ namespace IMDB
         static void Main(string[] args) 
         {
             var service=new IMDBService(new IMDBRepository());
-            service.Add(2009, "The Avatar 1", "A good sci-fi movie", new Person("James Cameron", DateOnly.Parse("12-11-2000")), new List<Person>() { new Person("1James Cameron", DateOnly.Parse("12-11-2000")), new Person("2James Cameron", DateOnly.Parse("12-11-2000")) });
             var userChoice = 0;
             string name, plot,actorsIndex;
             int yearOfRelease,producerIndex,movieIndex;
@@ -22,7 +21,7 @@ namespace IMDB
             Console.WriteLine("1) List Movies\r\n2) Add Movie\r\n3) Add Actor\r\n4) Add Producer\r\n5) Delete Movie\r\n6) Exit\r\n");
             while (userChoice !=6) 
             {
-                Console.WriteLine("What do you want to do?");
+                Console.WriteLine("\nWhat do you want to do?");
                 userChoice = int.Parse(Console.ReadLine());
                 switch(userChoice)
                 {
@@ -70,6 +69,7 @@ namespace IMDB
                         break;
                     case 5:
                         listOfString = service.Get().Select(a => a.Name).ToList();
+                        Console.Write("Choose a movie to delete: ");
                         for (var index = 0; index < listOfString.Count(); index = index + 1)
                         {
                             Console.Write($"{index + 1}. {listOfString[index]} ");
