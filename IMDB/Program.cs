@@ -17,6 +17,7 @@ namespace IMDB
             string name, plot,actorsIndex;
             int yearOfRelease,producerIndex,movieIndex;
             DateOnly dateOfBirth;
+
             var listOfString=new List<string>();
             Console.WriteLine("1) List Movies\r\n2) Add Movie\r\n3) Add Actor\r\n4) Add Producer\r\n5) Delete Movie\r\n6) Exit\r\n");
             while (userChoice !=6) 

@@ -1,6 +1,6 @@
 ﻿using System;
-//using System.Collections.Generic;
-//using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,7 +78,7 @@ namespace IMDB.Service
         {
             var list = from movie in _repository.GetMovies()
                        select $"{movie.Name} ({movie.YearOfRelease})\r\nPlot - {movie.Plot}\r\nActors - {string.Join(", ", movie.Actors.Select(person => person.Name).ToList())}\r\nProducers - {movie.Producer.Name}";
-            return string.Join("\n", list);
+            return string.Join("\n\n", list);
 
         }
 
