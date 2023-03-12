@@ -11,10 +11,10 @@ namespace IMDB
         {
             var service=new IMDBService();
             //Sample movies added to perform further operations
-            service.Add(2022,"The Avatar 2","A good action movie","James Cameron",new List<string>() { "Sam", "Stephen","Zoe" });
+            service.Add(2009,"The Avatar 1", "A good sci-fi movie", "James Cameron", new List<string>() { "Sam", "Stephen", "Zoe" });
+            service.Add(2022,"The Avatar 2","A good sci-fi movie","James Cameron",new List<string>() { "Sam", "Stephen","Zoe" });
             service.Add(2009,"Harry Potter","A good fantasy movie","JKR",new List<string>() { "Daniel Redcliff", "Emma Watson" });
             service.Add(2016,"Suicide Squad","A good action movie","Charles Raven",new List<string>() { "Jared Leto", "Will Smith" });
-
 
             Console.WriteLine("All movies after year 2010:");
             foreach ( var movie in service.ListAllMovieNamesAfterCertainYear(2010))
@@ -40,10 +40,9 @@ namespace IMDB
             {
                 Console.WriteLine(movie);
             }
+
+            Console.WriteLine("\nLatest movie which contains \"Avatar\" in its name:");
+            Console.WriteLine(service.LatestMovieWhoseNameContains("Avatar"));
         } 
     }
 }
-
-
-
-
