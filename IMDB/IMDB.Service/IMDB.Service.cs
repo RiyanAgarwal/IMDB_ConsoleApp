@@ -21,9 +21,9 @@ namespace IMDB.Service
         {
             _repository.AddProducerOrActor(name, date, b);
         }
-        public List<Person> ShowListOfActorsOrProducers(bool b)
+        public List<Person> ShowListOfActorsOrProducers(bool isActor)
         {
-            if (b)
+            if (isActor)
             {
                 return _repository.GetActors();
             }
@@ -39,7 +39,7 @@ namespace IMDB.Service
             var intList = index.Split(' ').Select(int.Parse).ToList();
 
             if (numberOActors < intList.Max())
-                return new List<Person>();
+                throw new ArgumentOutOfRangeException("Invalid Index");
             var actorList = new List<Person>();
             foreach (var integer in intList)
             {
@@ -53,7 +53,7 @@ namespace IMDB.Service
             if (index <= numberOfProducers)
                 return _repository.GetProducerByIndex(index);
             else
-                return new Person();
+                throw new ArgumentOutOfRangeException("Invalid Index");
         }
         public void Add(int yearOfRelease, string name, string plot, Person producer, List<Person> actors)
         {
