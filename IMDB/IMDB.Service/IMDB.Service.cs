@@ -17,9 +17,13 @@ namespace IMDB.Service
         {
             _repository = iMDBRepository;
         }
-        public void AddActorOrProducer(string name, DateOnly date, bool b)
+        public void AddActorOrProducer(string name, DateOnly date, bool isActor)
         {
-            _repository.AddProducerOrActor(name, date, b);
+            if(string.IsNullOrWhiteSpace(name)||date.Year>DateTime.Today.Date.Year) 
+            {
+                throw new Exception("Invalid data");    
+            }
+            _repository.AddProducerOrActor(name, date, isActor);
         }
         public List<Person> ShowListOfActorsOrProducers(bool isActor)
         {
@@ -68,7 +72,10 @@ namespace IMDB.Service
         }
         public void DeleteMovie(int index)
         {
-            _repository.RemoveMovie(index);
+            if (_repository.GetMovies().Count() < index||index<1)
+                throw new ArgumentOutOfRangeException("Invalid Index");
+            else
+                _repository.RemoveMovie(index);
         }
         public List<Movie> Get()
         {

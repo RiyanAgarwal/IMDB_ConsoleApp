@@ -17,56 +17,93 @@ namespace IMDB
             string name, plot,actorsIndex;
             int yearOfRelease,producerIndex,movieIndex;
             DateOnly dateOfBirth;
-
             var listOfString=new List<string>();
+            service.AddActorOrProducer("James", DateOnly.Parse("22.2.2000"), true);
+            service.AddActorOrProducer("Henry", DateOnly.Parse("22.2.2000"), true);
+            service.AddActorOrProducer("Heyman", DateOnly.Parse("22.2.2000"), false);
             Console.WriteLine("1) List Movies\r\n2) Add Movie\r\n3) Add Actor\r\n4) Add Producer\r\n5) Delete Movie\r\n6) Exit\r\n");
             while (userChoice !=6) 
             {
                 Console.WriteLine("\nWhat do you want to do?");
+
                 userChoice = int.Parse(Console.ReadLine());
                 switch(userChoice)
                 {
                     case 1:
-                        Console.WriteLine(service.ListMovies());
+                        if (string.IsNullOrWhiteSpace(service.ListMovies()))
+                            Console.WriteLine("Empty repository");
+                        else
+                            Console.WriteLine(service.ListMovies());
                         break;
                     case 2:
-                        Console.Write("Name: "); 
-                        name=Console.ReadLine();
-                        Console.Write("Year of release: ");
-                        yearOfRelease=int.Parse(Console.ReadLine());
-                        Console.Write("Plot: ");
-                        plot = Console.ReadLine();
-                        Console.Write("Choose Actor(s): ");
-                        listOfString=service.ShowListOfActorsOrProducers(true).Select(a => a.Name).ToList();
-                        for (var index = 0; index<listOfString.Count();index=index+1 )
+                        try
                         {
-                            Console.Write($"{index+1}. {listOfString[index]} ");
+                            Console.Write("Name: "); 
+                            name=Console.ReadLine();
+                            Console.Write("Year of release: ");
+
+                            yearOfRelease=int.Parse(Console.ReadLine());
+                            Console.Write("Plot: ");
+                            plot = Console.ReadLine();
+                            Console.Write("Choose Actor(s): ");
+                            listOfString=service.ShowListOfActorsOrProducers(true).Select(a => a.Name).ToList();
+                            for (var index = 0; index<listOfString.Count();index=index+1 )
+                            {
+                                Console.Write($"{index+1}. {listOfString[index]} ");
+                            }
+                            Console.WriteLine();
+                            actorsIndex=Console.ReadLine();
+                            Console.Write("Choose Producer: ");
+                            listOfString = service.ShowListOfActorsOrProducers(false).Select(a => a.Name).ToList();
+                            for (var index = 0; index < listOfString.Count(); index = index + 1)
+                            {
+                                Console.Write($"{index + 1}. {listOfString[index]} ");
+                            }
+                            Console.WriteLine();
+                            producerIndex = int.Parse(Console.ReadLine());
+                            service.Add(yearOfRelease, name, plot, service.ChosenProducer(producerIndex), service.ChosenActors(actorsIndex));
                         }
-                        Console.WriteLine();
-                        actorsIndex=Console.ReadLine();
-                        Console.Write("Choose Producer: ");
-                        listOfString = service.ShowListOfActorsOrProducers(false).Select(a => a.Name).ToList();
-                        for (var index = 0; index < listOfString.Count(); index = index + 1)
+                        catch (Exception ex) 
                         {
-                            Console.Write($"{index + 1}. {listOfString[index]} ");
+                            if (ex is FormatException)
+                                Console.WriteLine("Invalid data");
+                            else
+                                Console.WriteLine(ex.Message);
                         }
-                        Console.WriteLine();
-                        producerIndex = int.Parse(Console.ReadLine());
-                        service.Add(yearOfRelease, name, plot, service.ChosenProducer(producerIndex), service.ChosenActors(actorsIndex));
                         break;
                     case 3:
-                        Console.Write("Name: ");
-                        name=Console.ReadLine();
-                        Console.Write("DOB: ");
-                        dateOfBirth = DateOnly.Parse(Console.ReadLine());
-                        service.AddActorOrProducer(name, dateOfBirth, true);
+                        try
+                        {
+                            Console.Write("Name: ");
+                            name = Console.ReadLine();
+                            Console.Write("DOB: ");
+                            dateOfBirth = DateOnly.Parse(Console.ReadLine());
+                            service.AddActorOrProducer(name, dateOfBirth, true);
+                        }
+                        catch (Exception ex) 
+                        {
+                            if(ex is FormatException)
+                                Console.WriteLine("Invalid data");
+                            else
+                                Console.WriteLine(ex.Message);
+                        }
                         break;
                     case 4:
-                        Console.Write("Name: ");
-                        name = Console.ReadLine();
-                        Console.Write("DOB: ");
-                        dateOfBirth = DateOnly.Parse(Console.ReadLine());
-                        service.AddActorOrProducer(name, dateOfBirth, false);
+                        try
+                        {
+                            Console.Write("Name: ");
+                            name = Console.ReadLine();
+                            Console.Write("DOB: ");
+                            dateOfBirth = DateOnly.Parse(Console.ReadLine());
+                            service.AddActorOrProducer(name, dateOfBirth, false);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is FormatException)
+                                Console.WriteLine("Invalid data");
+                            else
+                                Console.WriteLine(ex.Message);
+                        }
                         break;
                     case 5:
                         listOfString = service.Get().Select(a => a.Name).ToList();
@@ -76,8 +113,15 @@ namespace IMDB
                             Console.Write($"{index + 1}. {listOfString[index]} ");
                         }
                         Console.WriteLine();
-                        movieIndex=int.Parse(Console.ReadLine());
-                        service.DeleteMovie(movieIndex);
+                        try
+                        {
+                            movieIndex=int.Parse(Console.ReadLine());
+                            service.DeleteMovie(movieIndex);
+                        }
+                        catch(Exception ex) 
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                         break;
                     case 6:
                         break;
@@ -88,4 +132,4 @@ namespace IMDB
             }
         } 
     }
-} 
+}
