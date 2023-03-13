@@ -58,15 +58,13 @@ namespace IMDB.Tests.StepDefinitions
         [Given(@"the following data is entered (.*), (.*), (.*), (.*), (.*)")]
         public void GivenTheFollowingDataIsEntered(string name,string plot,string actorsIndex,string producerIndex,string yearOfRelease)
         {
-            //_yearOfRelease=Int16.Parse(yearOfRelease);
-            //_name=name; 
-            //_plot=plot;
+            
             _actors = _service.ChosenActors(actorsIndex);
             _producer = _service.ChosenProducer(int.Parse(producerIndex));
             _yearOfRelease = int.Parse(yearOfRelease);
             _plot=plot;
             _name=name;
-            //_producer = "";
+          
             
         }
 
