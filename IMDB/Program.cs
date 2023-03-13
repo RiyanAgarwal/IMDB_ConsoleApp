@@ -18,9 +18,7 @@ namespace IMDB
             int yearOfRelease,producerIndex,movieIndex;
             DateOnly dateOfBirth;
             var listOfString=new List<string>();
-            service.AddActorOrProducer("James", DateOnly.Parse("22.2.2000"), true);
-            service.AddActorOrProducer("Henry", DateOnly.Parse("22.2.2000"), true);
-            service.AddActorOrProducer("Heyman", DateOnly.Parse("22.2.2000"), false);
+           
             Console.WriteLine("1) List Movies\r\n2) Add Movie\r\n3) Add Actor\r\n4) Add Producer\r\n5) Delete Movie\r\n6) Exit\r\n");
             while (userChoice !=6) 
             {
