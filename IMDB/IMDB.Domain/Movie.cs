@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IMDB.Domain
 {
-        public class Person
+    public class Person
     {
         public string Name { get; set; }
         public DateOnly DateOfBirth{ get; set; }
@@ -18,22 +18,20 @@ namespace IMDB.Domain
         }
         public Person() { }
     }
-        public class Movie
+    public class Movie
+    {
+        public int YearOfRelease { get; set; }
+        public string Name { get; set; }
+        public string Plot { get; set; }
+        public Person Producer { get; set; }
+        public List<Person> Actors { get; set; }
+        public Movie(int yearOfRelease, string name, string plot, Person producer, List<Person> actors)
         {
-            public int YearOfRelease { get; set; }
-
-            public string Name { get; set; }
-            public string Plot { get; set; }
-            public Person Producer { get; set; }
-            public List<Person> Actors { get; set; }
-
-            public Movie(int yearOfRelease, string name, string plot, Person producer, List<Person> actors)
-            {
-                YearOfRelease = yearOfRelease;
-                Name = name;
-                Plot = plot;
-                Producer = producer;
-                Actors = actors;
-            }
+            YearOfRelease = yearOfRelease;
+            Name = name;
+            Plot = plot;
+            Producer = producer;
+            Actors = actors;
         }
+    }
 }
