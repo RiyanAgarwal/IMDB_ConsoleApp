@@ -23,9 +23,9 @@ namespace IMDB.Repository
         {
             _movies.Add(movie);
         }
-        public void AddProducerOrActor(string name, DateOnly date, bool b)
+        public void AddProducerOrActor(string name, DateOnly date, bool isActor)
         {
-            if (b)
+            if (isActor)
             {
                 _actors.Add(new Person(name, date));
             }
