@@ -94,15 +94,15 @@ namespace IMDB
                         }
                         break;
                     case 5:
-                        listOfString = service.Get().Select(a => a.Name).ToList();
-                        Console.Write("Choose a movie to delete: ");
-                        for (var index = 0; index < listOfString.Count(); index = index + 1)
-                        {
-                            Console.Write($"{index + 1}. {listOfString[index]} ");
-                        }
-                        Console.WriteLine();
                         try
                         {
+                            listOfString = service.Get().Select(a => a.Name).ToList();
+                            Console.Write("Choose a movie to delete: ");
+                            for (var index = 0; index < listOfString.Count(); index = index + 1)
+                            {
+                                Console.Write($"{index + 1}. {listOfString[index]} ");
+                            }
+                            Console.WriteLine();
                             movieIndex=int.Parse(Console.ReadLine());
                             service.DeleteMovie(movieIndex);
                         }
