@@ -25,7 +25,7 @@ namespace IMDB.Service
             }
             if (date.Year > DateTime.Today.Date.Year||date.Year==2023)
             {
-                throw new ArgumentException("Invalid date")
+                throw new ArgumentException("Invalid date");
             }
             _repository.AddProducerOrActor(name, date, isActor);
         }
