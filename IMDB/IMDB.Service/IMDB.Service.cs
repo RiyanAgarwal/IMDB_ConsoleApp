@@ -19,9 +19,13 @@ namespace IMDB.Service
         }
         public void AddActorOrProducer(string name, DateOnly date, bool isActor)
         {
-            if(string.IsNullOrWhiteSpace(name)||date.Year>DateTime.Today.Date.Year) 
+            if(string.IsNullOrWhiteSpace(name)) 
             {
-                throw new Exception("Invalid data");    
+                throw new ArgumentException("Invalid name");    
+            }
+            if (date.Year > DateTime.Today.Date.Year||date.Year==2023)
+            {
+                throw new ArgumentException("Invalid date")
             }
             _repository.AddProducerOrActor(name, date, isActor);
         }
@@ -43,7 +47,7 @@ namespace IMDB.Service
             var intList = index.Split(' ').Select(int.Parse).ToList();
 
             if (numberOActors < intList.Max())
-                throw new ArgumentOutOfRangeException("Invalid Index");
+                throw new ArgumentException("Invalid actors");
             var actorList = new List<Person>();
             foreach (var integer in intList)
             {
@@ -57,13 +61,21 @@ namespace IMDB.Service
             if (index <= numberOfProducers)
                 return _repository.GetProducerByIndex(index);
             else
-                throw new ArgumentOutOfRangeException("Invalid Index");
+                throw new ArgumentException("Invalid producer");
         }
         public void Add(int yearOfRelease, string name, string plot, Person producer, List<Person> actors)
         {
-            if (actors.Count() == 0 || string.IsNullOrWhiteSpace(producer.Name) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(plot) || yearOfRelease > DateTime.Today.Year || yearOfRelease < 1800)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Invalid data");
+                throw new ArgumentException("Invalid name");
+            }
+            if (yearOfRelease > DateTime.Today.Year|| yearOfRelease<1800)
+            {
+                throw new InvalidDataException("Invalid year");
+            }
+            if (string.IsNullOrWhiteSpace(plot))
+            {
+                throw new ArgumentException("Invalid plot");
             }
             else
             {
@@ -78,8 +90,9 @@ namespace IMDB.Service
                 _repository.RemoveMovie(index);
         }
         public List<Movie> Get()
-        {
-            return _repository.GetMovies();
+        {   if (_repository.GetMovies().Count()>0)
+                return _repository.GetMovies();
+            throw new Exception( "Currently repository is empty");
         }
         public string ListMovies()
         {

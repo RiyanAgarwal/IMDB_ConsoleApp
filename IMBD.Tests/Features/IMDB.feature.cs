@@ -83,11 +83,11 @@ namespace IMDB.Tests.Features
         [Xunit.SkippableFactAttribute(DisplayName="Add a movie to repository")]
         [Xunit.TraitAttribute("FeatureTitle", "IMDB Console app")]
         [Xunit.TraitAttribute("Description", "Add a movie to repository")]
-        [Xunit.TraitAttribute("Category", "addMovieSuccess")]
+        [Xunit.TraitAttribute("Category", "addMovie")]
         public virtual void AddAMovieToRepository()
         {
             string[] tagsOfScenario = new string[] {
-                    "addMovieSuccess"};
+                    "addMovie"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add a movie to repository", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
@@ -141,15 +141,15 @@ this.ScenarioInitialize(scenarioInfo);
         [Xunit.TraitAttribute("Description", "Data entered is invalid")]
         [Xunit.TraitAttribute("Category", "addMovie")]
         [Xunit.InlineDataAttribute("", "American car designer Carroll Shelby and driver Ken Miles battle corporate interf" +
-            "erence", "1 2", "1", "2019", new string[0])]
+            "erence", "1 2", "1", "2019", "Invalid name", new string[0])]
         [Xunit.InlineDataAttribute("Ford v Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interf" +
-            "erence", "1 2", "1", "201", new string[0])]
-        [Xunit.InlineDataAttribute("Ford v Ferrari", "", "1 2", "1", "2019", new string[0])]
+            "erence", "1 2", "1", "201", "Invalid year", new string[0])]
+        [Xunit.InlineDataAttribute("Ford v Ferrari", "", "1 2", "1", "2019", "Invalid plot", new string[0])]
         [Xunit.InlineDataAttribute("Ford v Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interf" +
-            "erence", "5 6", "1", "2019", new string[0])]
+            "erence", "5 6", "1", "2019", "Invalid actors", new string[0])]
         [Xunit.InlineDataAttribute("Ford v Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interf" +
-            "erence", "1 2", "4", "2019", new string[0])]
-        public virtual void DataEnteredIsInvalid(string name, string plot, string actors, string producer, string year, string[] exampleTags)
+            "erence", "1 2", "4", "2019", "Invalid producer", new string[0])]
+        public virtual void DataEnteredIsInvalid(string name, string plot, string actors, string producer, string year, string error, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "addMovie"};
@@ -164,6 +164,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("Actors", actors);
             argumentsOfScenario.Add("Producer", producer);
             argumentsOfScenario.Add("Year", year);
+            argumentsOfScenario.Add("Error", error);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Data entered is invalid", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 17
 this.ScenarioInitialize(scenarioInfo);
@@ -192,7 +193,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("movie is added to repository", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 20
- testRunner.Then("an error \"Invalid data\" is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("an error {0} is displayed", error), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -229,12 +230,9 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 32
- testRunner.Given("list of movies is fetched", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.When("list of movies is fetched", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 33
- testRunner.When("repository is empty", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 34
  testRunner.Then("output should be \"Currently repository is empty\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -251,7 +249,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "listRepository"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("List all movies in the repository", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 38
+#line 37
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -271,14 +269,64 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 38
+ testRunner.When("list of movies is fetched", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Name",
+                            "Plot",
+                            "Actors",
+                            "Producer",
+                            "Year of release"});
+                table1.AddRow(new string[] {
+                            "Ford v Ferrari",
+                            "American car designer Carroll Shelby and driver Ken Miles battle corporate interf" +
+                                "erence",
+                            "1 2",
+                            "1",
+                            "2019"});
 #line 39
- testRunner.Given("list of movies is fetched", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Then("the following movies must be listed", ((string)(null)), table1, "Then ");
 #line hidden
-#line 40
- testRunner.When("repository of movies is not empty", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Display all movies in the repository")]
+        [Xunit.TraitAttribute("FeatureTitle", "IMDB Console app")]
+        [Xunit.TraitAttribute("Description", "Display all movies in the repository")]
+        [Xunit.TraitAttribute("Category", "displayRepository")]
+        public virtual void DisplayAllMoviesInTheRepository()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "displayRepository"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Display all movies in the repository", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 44
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
-#line 41
- testRunner.Then("the following movies must be listed", @"Ford v Ferrari (2019)
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 45
+ testRunner.When("list of movies is dislayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 46
+ testRunner.Then("the following movies must be displayed", @"Ford v Ferrari (2019)
 Plot - American car designer Carroll Shelby and driver Ken Miles battle corporate interference, the laws of physics and their own personal demons to build a revolutionary race car for Ford and challenge Ferrari at the 24 Hours of Le Mans in 1966.
 Actors - Matt Damon, Christian Bale
 Producers - James Mangold", ((TechTalk.SpecFlow.Table)(null)), "Then ");

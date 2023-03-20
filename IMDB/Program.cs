@@ -18,7 +18,6 @@ namespace IMDB
             int yearOfRelease,producerIndex,movieIndex;
             DateOnly dateOfBirth;
             var listOfString=new List<string>();
-           
             Console.WriteLine("1) List Movies\r\n2) Add Movie\r\n3) Add Actor\r\n4) Add Producer\r\n5) Delete Movie\r\n6) Exit\r\n");
             while (userChoice !=6) 
             {
@@ -63,10 +62,7 @@ namespace IMDB
                         }
                         catch (Exception ex) 
                         {
-                            if (ex is FormatException)
-                                Console.WriteLine("Invalid data");
-                            else
-                                Console.WriteLine(ex.Message);
+                            Console.WriteLine(ex.Message);
                         }
                         break;
                     case 3:
@@ -78,12 +74,9 @@ namespace IMDB
                             dateOfBirth = DateOnly.Parse(Console.ReadLine());
                             service.AddActorOrProducer(name, dateOfBirth, true);
                         }
-                        catch (Exception ex) 
+                        catch(Exception ex)
                         {
-                            if(ex is FormatException)
-                                Console.WriteLine("Invalid data");
-                            else
-                                Console.WriteLine(ex.Message);
+                            Console.WriteLine(ex.Message);
                         }
                         break;
                     case 4:
@@ -97,10 +90,7 @@ namespace IMDB
                         }
                         catch (Exception ex)
                         {
-                            if (ex is FormatException)
-                                Console.WriteLine("Invalid data");
-                            else
-                                Console.WriteLine(ex.Message);
+                            Console.WriteLine(ex.Message);
                         }
                         break;
                     case 5:
