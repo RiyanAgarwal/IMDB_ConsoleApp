@@ -5,6 +5,7 @@ using IMDB.Domain;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using TechTalk.SpecFlow.Assist;
 using System;
+using System.Xml.Linq;
 
 namespace IMDB.Tests.StepDefinitions
 {
@@ -75,10 +76,6 @@ namespace IMDB.Tests.StepDefinitions
                 _service.Add(_yearOfRelease, _name, _plot,_service.ChosenProducer(int.Parse(_producer)),_service.ChosenActors(_actors));
                 _message = "movie is added successfully";
             }
-            catch(ArgumentException ex)
-            {
-                _exception = ex;
-            }
             catch (Exception ex)
             {
                 _exception = ex;
@@ -105,6 +102,8 @@ namespace IMDB.Tests.StepDefinitions
             try
             {
                 _movies = _service.Get();
+                if (_movies.Count == 0)
+                    _message = "Currently repository is empty";
             }
             catch(Exception ex) 
             {
@@ -115,7 +114,7 @@ namespace IMDB.Tests.StepDefinitions
         [Then(@"output should be ""(.*)""")]
         public void ThenOutputShouldBe(string message)
         {
-            Assert.Equal( _exception.Message, message);
+            Assert.Equal( _message, message);
         }
 
 
@@ -134,14 +133,48 @@ namespace IMDB.Tests.StepDefinitions
         [Then(@"the following movies must be listed")]
         public void ThenTheFollowingMoviesMustBeListed(Table table)
         {
-            table.CompareToSet<Movie>(_movies);
+            var expectedMovieList=new List<Movie>();
+            var expectedMovies = table.CreateSet<(string name,string plot, string actorsIndex, string producerIndex, string yearOfRelease) >().ToList();
+            for (int i = 0;i<expectedMovies.Count();i++)
+            {
+                expectedMovieList.Add(new Movie(int.Parse(expectedMovies[i].yearOfRelease),
+                    expectedMovies[i].name,
+                    expectedMovies[i].plot,
+                    _service.ChosenProducer(int.Parse(expectedMovies[i].producerIndex)),
+                    _service.ChosenActors(expectedMovies[i].actorsIndex)));
+            }
+
+            Assert.Equal(expectedMovieList.Count(),_movies.Count());
+            for (int i = 0; i < expectedMovieList.Count(); i++)
+            {
+                var expectedMovie = expectedMovieList[i];
+                var actualMovie = _movies[i];
+
+                Assert.Equal(expectedMovie.Name, actualMovie.Name);
+                Assert.Equal(expectedMovie.YearOfRelease, actualMovie.YearOfRelease);
+                Assert.Equal(expectedMovie.Plot, actualMovie.Plot);
+
+                Assert.Equal(expectedMovie.Actors.Count, actualMovie.Actors.Count);
+                for (int j = 0; j < expectedMovie.Actors.Count; j++)
+                {
+                    Assert.Equal(expectedMovie.Actors[j].DateOfBirth, actualMovie.Actors[j].DateOfBirth);
+                    Assert.Equal(expectedMovie.Actors[j].Name, actualMovie.Actors[j].Name);
+                }
+
+                Assert.Equal(expectedMovie.Producer.DateOfBirth, actualMovie.Producer.DateOfBirth);
+                Assert.Equal(expectedMovie.Producer.Name, actualMovie.Producer.Name);
+            }
         }
+    
 
 
         [BeforeScenario("listRepository")]
         public void AddSampleMovie()
         {
-            _service.Add(2019, "Ford v Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interference", new Person("James Mangold", DateOnly.Parse("12-11-2000")), new List<Person>() { new Person("Matt Damon", DateOnly.Parse("12-11-2000")), new Person("Christian Bale", DateOnly.Parse("12-11-2000")) });
+            _service.AddActorOrProducer("brad", DateOnly.Parse("12-12-2012"), true);
+            _service.AddActorOrProducer("daniel", DateOnly.Parse("12-12-2012"), true);
+            _service.AddActorOrProducer("james", DateOnly.Parse("12-12-2012"), false);
+            _service.Add(2019, "Ford v Ferrari", "American car designer Carroll Shelby and driver Ken Miles battle corporate interference", new Person("james", DateOnly.Parse("12-12-2012")), new List<Person>() { new Person("brad", DateOnly.Parse("12-12-2012")), new Person("daniel", DateOnly.Parse("12-12-2012")) });
         }
         [BeforeScenario("displayRepository")]
         public void AddSampleMovieToDisplay()

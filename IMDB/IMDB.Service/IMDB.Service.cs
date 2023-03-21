@@ -90,9 +90,8 @@ namespace IMDB.Service
                 _repository.RemoveMovie(index);
         }
         public List<Movie> Get()
-        {   if (_repository.GetMovies().Count()>0)
-                return _repository.GetMovies();
-            throw new Exception( "Currently repository is empty");
+        {
+            return _repository.GetMovies();            
         }
         public string ListMovies()
         {
