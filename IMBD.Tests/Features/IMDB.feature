@@ -1,0 +1,52 @@
+﻿Feature: IMDB Console app 
+A console app similar to IMDB
+
+
+@addMovie
+Scenario: Add a movie to repository
+	Given the movie has name "Ford and Ferrari"
+	And the year of release is "2019"
+	And plot is "American car designer Carroll Shelby and driver Ken Miles battle corporate interference"
+	And from list of actors "1 2" are choosen
+	And from list of producers "1" is choosen
+	When movie is added to repository
+	Then the message "movie is added successfully" display
+	
+
+@addMovie
+Scenario Outline: Data entered is invalid
+	Given the following data is entered <Name>, <Plot>, <Actors>, <Producer>, <Year>
+	When movie is added to repository
+	Then an error <Error> is displayed
+	Examples:
+		| Name           | Plot                                                                                    | Actors | Producer | Year | Error            |
+		|                | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 1 2    | 1        | 2019 | Invalid name     |
+		| Ford v Ferrari | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 1 2    | 1        | 201  | Invalid year     |
+		| Ford v Ferrari |                                                                                         | 1 2    | 1        | 2019 | Invalid plot     |
+		| Ford v Ferrari | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 5 6    | 1        | 2019 | Invalid actors   |
+		| Ford v Ferrari | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 1 2    | 4        | 2019 | Invalid producer |
+	
+
+@listEmptyRepository
+Scenario: Movie repository should not be empty
+	When list of movies is fetched
+	Then output should be "Currently repository is empty"
+
+
+@listRepository
+Scenario: List all movies in the repository
+	When list of movies is fetched
+	Then the following movies must be listed
+	| Name           | Plot                                                                                    | Actors | Producer | Year of release| 
+	|Ford v Ferrari  | American car designer Carroll Shelby and driver Ken Miles battle corporate interference | 1 2    | 1        | 2019           |
+
+@displayRepository
+Scenario: Display all movies in the repository
+	When list of movies is dislayed
+	Then the following movies must be displayed
+	"""
+	Ford v Ferrari (2019)
+	Plot - American car designer Carroll Shelby and driver Ken Miles battle corporate interference, the laws of physics and their own personal demons to build a revolutionary race car for Ford and challenge Ferrari at the 24 Hours of Le Mans in 1966.
+	Actors - Matt Damon, Christian Bale
+	Producers - James Mangold
+	"""
